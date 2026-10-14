@@ -1,6 +1,6 @@
 # PORTIA dataset notes for module 7
 
-This note covers the dataset background, reasonable assumptions, hypothesized predictive power, and why the dataset matters for the module 7 prompt. It does not pick the group research question. Jose is doing more data work and the research question. `data-prep/` and `eda/` already cover preparation and the first look.
+PORTIA is a Port of Valencia acoustic set with AIS labels. The May zip in this repo and the October paper do not use the same subset counts.
 
 ## Background
 
@@ -33,8 +33,8 @@ The working hypothesis is that the audio windows carry predictive signal for ves
 ## Assumptions
 
 1. **Assumption:** Do not put the paper's 36,148, 39,125, and 34,996 on a slide about this repo's tables until someone checks the CSVs from record 19204539. The May page and the paper disagree.
-2. **Assumption:** An AIS label is not proof that the vessel is the sound in the window. `eda/eda.ipynb` already says labels come from AIS, not verified audible sources. Do not restate the plots.
-3. **Assumption:** Jose's notebook says the official splits can share recordings. The paper says splits are MMSI-aware. Those are different claims, meaning same file versus same ship. Do not call either wrong.
+2. **Assumption:** An AIS label is not proof that the vessel is the sound in the window. Labels come from AIS, not verified audible sources.
+3. **Assumption:** Official splits can share recordings. The paper says splits are MMSI-aware. Those are different claims, meaning same file versus same ship.
 4. **Assumption:** Class imbalance on the May page is the port's traffic, not a bug in the sample.
 5. **Assumption:** Channel layout and sample format on the v2 page are not facts about the May zip until someone opens a wav from record 19204539.
 
@@ -42,6 +42,4 @@ The working hypothesis is that the audio windows carry predictive signal for ves
 
 Large labeled sets from a real busy port are scarce. The paper is days old and still an early version. The midpoint prompt wants a dataset that does not already have a guaranteed answer.
 
-## What this file does not do
 
-This file does not set a research question or choose a model. It makes no change to `prepare.py` or the notebook.
