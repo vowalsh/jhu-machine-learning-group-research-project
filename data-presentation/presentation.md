@@ -185,7 +185,7 @@ We exclude and flag these cases. We don't relabel anything.
 
 ---
 
-<!-- _footer: "These are the authors' benchmarks. We have not tested any of them." -->
+<!-- _footer: "Benchmark = task released by the authors. Exploratory = supported by the labels but not a separate benchmark. We have not tested any of these." -->
 
 # Hypotheses: what might the audio predict?
 
@@ -194,6 +194,7 @@ We exclude and flag these cases. We don't relabel anything.
 | **H1** Presence *(benchmark)* | Vessel vs. background | Propeller and engine noise; our 200-2,000 Hz gap | Background comes from AIS-quiet periods, so time-of-day cues may leak in; boats without AIS count as background |
 | **H2** Vessel type *(benchmark)* | Class of the one AIS vessel | Size, engines, and speed differ by class | 7 imbalanced classes; 17.5% of "single" windows have more vessels; distance confounds type |
 | **H3** Class mix *(benchmark)* | Multi-hot vector of 7 classes | Each vessel adds its own components | 73% of windows overlap; labels describe the scene, not separated sources |
+| **H4** Proximity *(exploratory)* | Distance (km) to nearest vessel | Received level drops with distance | AIS geometry, not acoustic range; ±1 min alignment; files look peak-scaled |
 
 ---
 
@@ -206,17 +207,25 @@ We exclude and flag these cases. We don't relabel anything.
 - One port, one sensor position, a few weeks in spring. The authors don't claim transfer to other sites.
 - Every WAV we checked peaks near 1.0, so absolute loudness is probably not comparable across files.
 - The public files don't fully match the paper, and our working subset is small.
-- Proximity is not a released benchmark. The files look peak-scaled, so loudness is a weak distance cue.
 
 ---
 
-<!-- _footer: "ShipsEar: Santos-Domínguez et al. (2016). DeepShip: Irfan et al. (2021)." -->
+<!-- _footer: "Comparison with other datasets follows the authors' framing; ShipsEar: Santos-Domínguez et al. (2016); DeepShip: Irfan et al. (2021)." -->
+
+# Why the dataset is useful
+
+- Earlier public sets, such as ShipsEar and DeepShip, mostly hold isolated vessel passages. PORTIA records a working port where traffic overlaps.
+- AIS labelling scales to about 95,000 public windows without manual annotation.
+- The same windows support detection, type classification, and distance targets.
+- The data are public on Zenodo under CC BY 4.0, and the authors document the pipeline.
+- The messy parts, like imbalance, overlap, and noisy labels, are what real monitoring looks like.
+
+---
 
 # Conclusions
 
 - PORTIA pairs a real port soundscape with automatic AIS labels.
 - Keep the counts apart: 260,932 internal windows, 95,022 unique public windows, and our 1,506 development WAVs.
-- ShipsEar and DeepShip are mostly isolated passages. PORTIA is a working port, so vessels overlap.
 - The EDA shows class imbalance, frequent overlap, and a modest 200-2,000 Hz gap between vessel and background medians.
 - Label and split problems led us to a day split. That split does not keep one vessel in one set.
 - **Our question:** How well can a 3-second underwater recording tell us about the vessel traffic around it?
