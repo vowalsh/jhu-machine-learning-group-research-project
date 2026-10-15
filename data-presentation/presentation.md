@@ -117,6 +117,7 @@ Machine Learning group project, Johns Hopkins University
 
 - 3 s at 32 kHz, 4 channels. Channels 0, 2, 3 are hydrophones; channel 1 is unused (median RMS 0.0001 vs. 0.08–0.14).
 - Both windows show steady lines near 50, 100, 150, 200 Hz and short broadband clicks. The authors attribute such clicks to snapping shrimp.
+- The two windows look alike by eye. The AIS label is not obvious from the picture.
 
 ---
 
@@ -141,8 +142,9 @@ We exclude and flag these cases. We don't relabel anything.
 
 ![w:1050](figures/windows_per_day.png)
 
-- One split for all three tasks, so no WAV or day crosses train, validation, and test. The trade-off is that a vessel can appear on several days.
-- We sampled 300 training and 200 validation windows per task, plus a small coverage supplement: 1,506 development WAVs.
+- One split for all three tasks, so no WAV or day crosses train, validation, and test.
+- A vessel can still show up on more than one day. We have not counted how many MMSIs cross the split.
+- We took 300 training windows and 200 validation windows per task. Coverage can add validation windows on top of the 200. The sample is 1,506 development WAVs.
 - Test-day audio is never opened. May 31 to June 2 have almost no released windows.
 
 ---
@@ -183,16 +185,15 @@ We exclude and flag these cases. We don't relabel anything.
 
 ---
 
-<!-- _footer: "Benchmark = task released by the authors. Exploratory = supported by the labels but not a separate benchmark. We have not tested any of these." -->
+<!-- _footer: "These are the authors' benchmarks. We have not tested any of them." -->
 
 # Hypotheses: what might the audio predict?
 
 | | Predict | Why audio might carry it | What makes it hard |
 |---|---|---|---|
-| **H1** Presence *(benchmark)* | Vessel vs. background | Propeller and engine noise; our 200–2,000 Hz gap | Background comes from AIS-quiet periods, so time-of-day cues may leak in; boats without AIS count as background |
+| **H1** Presence *(benchmark)* | Vessel vs. background | Propeller and engine noise; our 200-2,000 Hz gap | Background comes from AIS-quiet periods, so time-of-day cues may leak in; boats without AIS count as background |
 | **H2** Vessel type *(benchmark)* | Class of the one AIS vessel | Size, engines, and speed differ by class | 7 imbalanced classes; 17.5% of "single" windows have more vessels; distance confounds type |
 | **H3** Class mix *(benchmark)* | Multi-hot vector of 7 classes | Each vessel adds its own components | 73% of windows overlap; labels describe the scene, not separated sources |
-| **H4** Proximity *(exploratory)* | Distance (km) to nearest vessel | Received level drops with distance | AIS geometry, not acoustic range; ±1 min alignment; files look peak-scaled |
 
 ---
 
@@ -205,28 +206,20 @@ We exclude and flag these cases. We don't relabel anything.
 - One port, one sensor position, a few weeks in spring. The authors don't claim transfer to other sites.
 - Every WAV we checked peaks near 1.0, so absolute loudness is probably not comparable across files.
 - The public files don't fully match the paper, and our working subset is small.
+- Proximity is not a released benchmark. The files look peak-scaled, so loudness is a weak distance cue.
 
 ---
 
-<!-- _footer: "Comparison with other datasets follows the authors' framing; ShipsEar: Santos-Domínguez et al. (2016); DeepShip: Irfan et al. (2021)." -->
-
-# Why the dataset is useful
-
-- Earlier public sets, such as ShipsEar and DeepShip, mostly hold isolated vessel passages. PORTIA records a working port where traffic overlaps.
-- AIS labelling scales to about 95,000 public windows without manual annotation.
-- The same windows support detection, type classification, and distance targets.
-- The data are public on Zenodo under CC BY 4.0, and the authors document the pipeline.
-- The messy parts, like imbalance, overlap, and noisy labels, are what real monitoring looks like.
-
----
+<!-- _footer: "ShipsEar: Santos-Domínguez et al. (2016). DeepShip: Irfan et al. (2021)." -->
 
 # Conclusions
 
 - PORTIA pairs a real port soundscape with automatic AIS labels.
-- Keep the levels apart: 260,932 internal windows, 95,022 unique public windows, and our 1,506-WAV development subset.
-- Our EDA shows strong class imbalance, frequent overlap, and a modest 200–2,000 Hz difference between vessel and background medians.
-- Label and split issues led us to use our own day-based split.
-- **Research question:** How reliably can underwater sound distinguish vessel activity in a busy port?
+- Keep the counts apart: 260,932 internal windows, 95,022 unique public windows, and our 1,506 development WAVs.
+- ShipsEar and DeepShip are mostly isolated passages. PORTIA is a working port, so vessels overlap.
+- The EDA shows class imbalance, frequent overlap, and a modest 200-2,000 Hz gap between vessel and background medians.
+- Label and split problems led us to a day split. That split does not keep one vessel in one set.
+- **Our question:** How well can a 3-second underwater recording tell us about the vessel traffic around it?
 
 ---
 
